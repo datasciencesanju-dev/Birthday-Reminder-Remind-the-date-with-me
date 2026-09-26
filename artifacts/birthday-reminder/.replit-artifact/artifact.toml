@@ -1,0 +1,24 @@
+kind = "mobile"
+previewPath = "/birthday-reminder/"
+title = "Birthday Reminder"
+description = "A warm, offline-first Android birthday reminder app with calendar, upcoming birthdays, reminders, import/export, and an Express backend for future sync."
+version = "1.0.0"
+id = "artifacts/birthday-reminder"
+router = "expo-domain"
+
+[[services]]
+name = "expo"
+ensurePreviewReachable = "/status"
+paths = [ "/birthday-reminder/" ]
+localPort = 19464
+
+[services.development]
+run = "pnpm --filter @workspace/birthday-reminder run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/birthday-reminder", "run", "build" ]
+run = [ "pnpm", "--filter", "@workspace/birthday-reminder", "run", "serve" ]
+
+[services.env]
+PORT = "19464"
+BASE_PATH = "/birthday-reminder/"

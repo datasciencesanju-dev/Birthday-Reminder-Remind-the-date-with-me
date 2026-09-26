@@ -1,0 +1,2676 @@
+You are an expert Android application architect, UI/UX designer, Kotlin developer, database engineer, notification-system engineer, and QA engineer.
+
+Build a complete production-ready Android application named:
+
+"Birthday Reminder - remind the date with me"
+
+The application must be a native Android app, not a web wrapper.
+
+IMPORTANT:
+Do not create only a UI prototype.
+Build the complete functional Android application including:
+- UI
+- Navigation
+- Local database
+- Birthday CRUD
+- Recurring yearly birthdays
+- Notifications/reminders
+- Import/export
+- Search
+- Calendar
+- Upcoming birthdays
+- Settings
+- Theme
+- Language architecture
+- Permissions
+- Backup/restore architecture
+- Error handling
+- Testing
+- Release configuration
+
+The app should work primarily offline.
+
+==================================================
+1. REFERENCE UI
+==================================================
+
+I have provided screenshots of an existing birthday calendar application.
+
+Use the screenshots as UI/UX inspiration, but DO NOT copy branding, copyrighted assets, developer information, or proprietary implementation.
+
+Analyze the screenshots carefully.
+
+The reference application contains:
+
+1. Year calendar screen
+2. 12-month calendar grid
+3. Birthday indicators on dates
+4. Add (+) button
+5. Overflow menu
+6. Navigation drawer/menu
+7. Settings screen
+8. Notifications setting
+9. Start day of week
+10. Zodiac options
+11. Chinese zodiac
+12. Date picker
+13. Toolbar color
+14. Day/night theme
+15. Notification troubleshooting
+16. Privacy policy
+17. Language
+18. Translation improvement
+19. Licenses
+20. Import birthdays
+21. Share birthdays
+22. Export birthdays
+23. Printing
+24. Sync birthdays
+25. Upcoming/Next birthdays
+26. Past birthdays
+27. Year grouping
+28. Birthday age calculation
+29. Remaining-days calculation
+
+Use these concepts but create a modern, cleaner and more polished design for our application.
+
+==================================================
+2. TECHNOLOGY STACK
+==================================================
+
+Use:
+
+Language:
+Kotlin
+
+Android:
+Native Android
+
+UI:
+Jetpack Compose
+
+Architecture:
+MVVM + Clean Architecture principles
+
+Navigation:
+Jetpack Navigation Compose
+
+Dependency Injection:
+Hilt
+
+Database:
+Room
+
+Preferences:
+DataStore Preferences
+
+Async:
+Kotlin Coroutines + Flow
+
+Date/Time:
+java.time API
+
+Notifications:
+Android NotificationManager
+AlarmManager where exact scheduled reminders are required
+
+Background:
+WorkManager where appropriate
+
+Build:
+Gradle Kotlin DSL
+
+Minimum SDK:
+Choose a practical modern minimum SDK, preferably Android 8.0/API 26 or higher unless a dependency requires otherwise.
+
+Target SDK:
+Use the latest stable Android SDK available in the Replit environment.
+
+IMPORTANT:
+Use current stable libraries and avoid obsolete Android APIs.
+
+==================================================
+3. APPLICATION PACKAGE
+==================================================
+
+Use a clean package structure similar to:
+
+com.birthdayreminder.app
+
+Suggested architecture:
+
+app/
+    src/main/java/com/birthdayreminder/app/
+
+        data/
+            local/
+                dao/
+                database/
+                entity/
+            repository/
+
+        domain/
+            model/
+            repository/
+            usecase/
+
+        presentation/
+            calendar/
+            upcoming/
+            birthday/
+            birthdaydetail/
+            settings/
+            search/
+            importexport/
+            components/
+
+        notifications/
+
+        navigation/
+
+        theme/
+
+        utils/
+
+        MainActivity.kt
+
+Do not put all code in one Activity.
+
+Keep the code modular and maintainable.
+
+==================================================
+4. BRANDING
+==================================================
+
+Application name:
+
+Birthday Reminder
+
+Subtitle/tagline:
+
+"remind the date with me"
+
+Create a simple friendly birthday-focused identity.
+
+Suggested visual direction:
+
+Primary:
+Bright blue
+
+Secondary:
+Pink / purple birthday accent
+
+Background:
+Light neutral
+
+Dark mode:
+Proper dark theme
+
+Birthday icon:
+Simple balloon / cake / gift concept
+
+Do not use copyrighted logos.
+
+The UI should feel:
+- clean
+- friendly
+- modern
+- lightweight
+- easy to understand
+- suitable for all age groups
+
+==================================================
+5. MAIN SCREEN
+==================================================
+
+The primary screen should be a yearly calendar.
+
+Top app bar:
+
+Left:
+Navigation/menu icon
+
+Center:
+Current year, for example:
+
+2026
+
+Right:
++
+and
+three-dot overflow menu
+
+Below:
+
+Display all 12 months in a responsive 3-column grid on larger screens.
+
+On smaller phones:
+adapt the grid responsively.
+
+Each month should show:
+
+Month name
+
+Week labels:
+
+Sun Mon Tue Wed Thu Fri Sat
+
+Then date numbers.
+
+Birthday dates should have a visual indicator.
+
+For example:
+
+🎈
+
+or a small colored dot/balloon.
+
+The current date should be highlighted.
+
+Birthday dates should have a different visual treatment.
+
+Example:
+
+26
+with a circular pink/red highlight if today.
+
+==================================================
+6. CALENDAR INTERACTION
+==================================================
+
+Clicking a date should open the birthday/date detail screen.
+
+If birthdays exist:
+
+Show:
+
+Birthdays on this date
+
+Example:
+
+26 September
+
+🎈 Rahul
+Birthday: 26 September
+Age: 25
+
+🎈 Priya
+Birthday: 26 September
+Age: 31
+
+Provide:
+
+Add Birthday
+
+If there is no birthday:
+
+Show:
+
+"No birthdays on this date"
+
+and
+
+"Add Birthday"
+
+==================================================
+7. ADD BIRTHDAY
+==================================================
+
+Pressing + should open:
+
+"Add Birthday"
+
+Form:
+
+Full Name *
+Date of Birth *
+Photo
+Relationship
+Phone
+Email
+Notes
+
+Optional fields:
+
+Nickname
+Company
+Address
+Favorite color
+Gift ideas
+
+Birthday reminder:
+
+Enable/Disable
+
+Reminder options:
+
+On birthday
+1 day before
+2 days before
+3 days before
+7 days before
+Custom
+
+Reminder time:
+
+Default:
+09:00 AM
+
+Allow user to change it.
+
+Repeat:
+
+Every year
+
+The birthday must automatically repeat every year.
+
+IMPORTANT:
+
+Do NOT duplicate birthday records every year.
+
+Store the original DOB and calculate the current year's birthday dynamically.
+
+Buttons:
+
+Cancel
+
+Save Birthday
+
+Validate:
+- name required
+- date required
+- valid date
+- prevent accidental duplicate entries if same name + date already exists
+
+==================================================
+8. BIRTHDAY DETAIL SCREEN
+==================================================
+
+When user taps a birthday, show:
+
+Profile photo/avatar
+
+Name
+
+Birthday date
+
+Formatted date:
+
+26 September 2000
+
+Current age:
+
+25 years
+
+Next birthday:
+
+26 September 2027
+
+Countdown:
+
+365 days
+
+or
+
+"Today"
+
+or
+
+"Tomorrow"
+
+Show:
+
+Days until birthday
+
+Age they will turn next birthday
+
+Relationship
+
+Phone
+
+Email
+
+Notes
+
+Actions:
+
+Edit
+
+Delete
+
+Share
+
+Call
+
+Message
+
+Email
+
+Reminder settings
+
+Delete should show confirmation dialog.
+
+==================================================
+9. AGE CALCULATION
+==================================================
+
+Implement accurate age calculation.
+
+Example:
+
+DOB:
+26 September 2000
+
+Current date:
+26 September 2026
+
+Age:
+26
+
+If birthday has not occurred this year:
+
+Age should remain previous age.
+
+Use java.time.LocalDate and Period.
+
+Handle leap-day birthdays.
+
+Allow a configurable behavior for February 29 birthdays:
+
+Option:
+Celebrate on February 28
+or
+Celebrate on March 1
+
+Default should be February 28.
+
+==================================================
+10. UPCOMING / NEXT SCREEN
+==================================================
+
+Create a screen called:
+
+"Next"
+
+It should show upcoming birthdays chronologically.
+
+Example:
+
+NEXT
+
+September 2026
+
+🎈 Rahul
+Saturday, September 26
+Today
+
+🎈 Priya
+Tuesday, September 29
+in 3 days
+
+October 2026
+
+🎈 Amit
+October 7
+in 11 days
+
+Group birthdays by year/month where useful.
+
+Also include:
+
+Today
+Tomorrow
+This week
+Next week
+Later
+
+Each birthday card should show:
+
+Avatar
+Name
+Date
+Age turning
+Countdown
+
+Example:
+
+Rahul
+26 September
+Turning 26
+Today
+
+==================================================
+11. PAST BIRTHDAYS
+==================================================
+
+The Next screen should optionally show past birthdays.
+
+Example:
+
+PAST
+
+🎈 Rahul
+Friday, November 7
+323 days ago
+
+Allow:
+
+Show Past Birthdays
+
+setting.
+
+==================================================
+12. SEARCH
+==================================================
+
+Add search functionality.
+
+Search by:
+
+Name
+Nickname
+Relationship
+Phone
+Email
+
+Search should update results instantly.
+
+Show:
+
+Search birthdays...
+
+If no results:
+
+"No birthdays found"
+
+==================================================
+13. NAVIGATION DRAWER
+==================================================
+
+Create a navigation drawer.
+
+Menu:
+
+Calendar
+
+Next Birthdays
+
+Search
+
+Notifications
+
+Import Birthdays
+
+Export Birthdays
+
+Share Birthdays
+
+Settings
+
+About
+
+The reference screenshot uses an overflow popup.
+
+Our app can use either:
+- Navigation drawer
+- Overflow menu
+or both.
+
+Make navigation intuitive.
+
+==================================================
+14. NOTIFICATIONS
+==================================================
+
+This is a critical feature.
+
+Implement real Android birthday notifications.
+
+Users should receive notifications according to reminder settings.
+
+Example:
+
+🎂 Birthday Reminder
+
+Today is Rahul's birthday!
+
+Rahul is turning 26.
+
+Actions:
+
+View Birthday
+
+Dismiss
+
+Notification should work even when the app is closed.
+
+Schedule reminders using AlarmManager where appropriate.
+
+Handle Android notification permission requirements.
+
+For Android versions requiring POST_NOTIFICATIONS:
+
+Request permission gracefully.
+
+Explain why notification permission is required.
+
+Do not continuously ask for permission.
+
+==================================================
+15. NOTIFICATION TYPES
+==================================================
+
+Support:
+
+Birthday today
+
+Birthday tomorrow
+
+Birthday in 2 days
+
+Birthday in 3 days
+
+Birthday in 7 days
+
+Custom reminder
+
+Notification title examples:
+
+"🎂 Birthday Today!"
+
+"🎈 Birthday Tomorrow"
+
+"Upcoming Birthday"
+
+Notification body:
+
+"Rahul is turning 26 today."
+
+Allow user to enable/disable notification sound.
+
+Allow notification vibration preference where supported.
+
+==================================================
+16. NOTIFICATION SETTINGS
+==================================================
+
+Settings should contain:
+
+Birthday notifications
+ON/OFF
+
+Notification sound
+ON/OFF
+
+Vibration
+ON/OFF
+
+Default reminder:
+
+Birthday day
+
+1 day before
+
+2 days before
+
+3 days before
+
+7 days before
+
+Custom
+
+Default reminder time:
+
+09:00 AM
+
+Notification troubleshooting
+
+This should help users diagnose:
+
+- notification permission disabled
+- battery optimization
+- alarms disabled
+- notification channel disabled
+
+Do not claim the app can bypass Android restrictions.
+
+Instead provide instructions to the user.
+
+==================================================
+17. IMPORT BIRTHDAYS
+==================================================
+
+Implement birthday import.
+
+Support:
+
+CSV
+
+Example CSV:
+
+name,date_of_birth,phone,email,relationship,notes
+
+Example:
+
+Rahul,2000-09-26,9876543210,rahul@example.com,Friend,College friend
+
+Support Android file picker.
+
+Validate imported data.
+
+Show import preview before saving.
+
+Example:
+
+Import Birthdays
+
+Found:
+25 records
+
+Valid:
+23
+
+Invalid:
+2
+
+Allow:
+
+Import valid records
+
+Cancel
+
+Show errors for invalid rows.
+
+==================================================
+18. EXPORT BIRTHDAYS
+==================================================
+
+Allow exporting birthday data.
+
+Formats:
+
+CSV
+
+JSON
+
+The exported data should include:
+
+Name
+Date of Birth
+Phone
+Email
+Relationship
+Notes
+Reminder settings
+
+Use Android share/file APIs.
+
+Never upload user data anywhere without explicit user action.
+
+==================================================
+19. SHARE BIRTHDAYS
+==================================================
+
+Allow users to share birthday data.
+
+Use Android Sharesheet.
+
+Possible:
+
+Share CSV
+
+Share JSON
+
+Share selected birthday
+
+Do not expose all private information by default when sharing a single birthday.
+
+Provide confirmation before sharing sensitive fields like phone/email.
+
+==================================================
+20. BACKUP / RESTORE
+==================================================
+
+Create local backup/restore functionality.
+
+Backup:
+
+JSON
+
+Allow user to save backup file.
+
+Restore:
+
+Select backup file.
+
+Show preview:
+
+Records found:
+50
+
+New:
+40
+
+Duplicates:
+10
+
+Allow:
+
+Restore
+
+Cancel
+
+Never silently overwrite existing records.
+
+Provide duplicate handling:
+
+Skip duplicates
+Update existing
+Create separate record
+
+Default:
+Skip duplicates
+
+==================================================
+21. SYNC ARCHITECTURE
+==================================================
+
+Initially implement the application fully offline.
+
+Do NOT require a backend for the core application.
+
+However, create clean repository interfaces so cloud synchronization can be added later.
+
+Architecture should allow future:
+
+Google Drive backup
+Firebase sync
+Account-based synchronization
+
+without rewriting the entire application.
+
+Do NOT add Firebase unless it is actually required.
+
+==================================================
+22. SETTINGS SCREEN
+==================================================
+
+Create a complete Settings screen inspired by the reference screenshots.
+
+Sections:
+
+GENERAL
+
+Start day of week
+- Sunday
+- Monday
+- Saturday
+
+Notifications
+- Birthday notifications
+- Notification sound
+- Vibration
+- Default reminder
+- Reminder time
+
+CALENDAR
+
+Show birthday indicators
+Show zodiac signs
+Show Chinese zodiac
+Show age
+Show past birthdays
+
+DATE
+
+Date picker style
+
+APPEARANCE
+
+Theme:
+- System default
+- Light
+- Dark
+
+Toolbar color
+
+Language
+
+DATA
+
+Import birthdays
+Export birthdays
+Backup
+Restore
+Delete all birthdays
+
+ADVANCED
+
+Notification troubleshooting
+Privacy
+Licenses
+
+ABOUT
+
+App name
+Version
+Developer information
+
+==================================================
+23. THEME
+==================================================
+
+Implement:
+
+Light Theme
+
+Dark Theme
+
+System Theme
+
+Allow toolbar color customization.
+
+Use Material 3.
+
+The color customization must be implemented properly through Compose theme colors.
+
+Do not hard-code colors throughout the UI.
+
+==================================================
+24. LANGUAGE
+==================================================
+
+Create localization architecture.
+
+Initially support:
+
+English
+
+Hindi
+
+Keep all strings inside:
+
+res/values/strings.xml
+
+and:
+
+res/values-hi/strings.xml
+
+Do NOT hardcode user-facing strings inside Kotlin/Compose code.
+
+Make it easy to add more languages later.
+
+==================================================
+25. ZODIAC
+==================================================
+
+Add optional zodiac signs.
+
+If enabled:
+
+Show zodiac sign for birthday.
+
+Example:
+
+Rahul
+26 September
+Libra ♎
+
+Provide toggle:
+
+Show zodiac signs
+
+Chinese zodiac:
+
+Provide toggle:
+
+Chinese zodiac
+
+Calculate based on birth year.
+
+Make sure zodiac calculations use correct date ranges.
+
+==================================================
+26. DATE PICKER
+==================================================
+
+Implement a clean Material date picker.
+
+Allow users to choose:
+
+Day
+Month
+Year
+
+For birthday reminders, day and month are always required.
+
+Year is optional if user doesn't know the birth year.
+
+Support:
+
+"Birth year unknown"
+
+If birth year is unknown:
+
+Do not show calculated age.
+
+Show:
+
+Birthday:
+26 September
+
+instead of an incorrect age.
+
+==================================================
+27. BIRTHDAY LIST
+==================================================
+
+Create reusable birthday cards.
+
+Card:
+
+[Avatar]
+
+Rahul Sharma
+
+26 September
+
+Turning 26
+
+🎈 Today
+
+Actions:
+View
+Edit
+
+Use Material 3 cards.
+
+Cards should have rounded corners and subtle elevation.
+
+==================================================
+28. EMPTY STATES
+==================================================
+
+If there are no birthdays:
+
+Show:
+
+🎈
+
+"No birthdays yet"
+
+"Add birthdays so you never miss an important date."
+
+Button:
+
+Add Birthday
+
+If there are no upcoming birthdays:
+
+"No upcoming birthdays"
+
+==================================================
+29. DELETE BEHAVIOR
+==================================================
+
+When deleting a birthday:
+
+Show confirmation dialog.
+
+Title:
+
+Delete Birthday?
+
+Message:
+
+"Are you sure you want to delete Rahul's birthday?"
+
+Buttons:
+
+Cancel
+
+Delete
+
+Do not delete immediately.
+
+==================================================
+30. UNDO DELETE
+==================================================
+
+After deleting, show Snackbar:
+
+"Birthday deleted"
+
+Action:
+
+UNDO
+
+Undo should restore the record.
+
+==================================================
+31. DATA MODEL
+==================================================
+
+Create Room entity:
+
+BirthdayEntity
+
+Fields:
+
+id: Long
+
+name: String
+
+dateOfBirth: LocalDate/String
+
+birthYearKnown: Boolean
+
+photoUri: String?
+
+phone: String?
+
+email: String?
+
+relationship: String?
+
+nickname: String?
+
+company: String?
+
+address: String?
+
+favoriteColor: String?
+
+giftIdeas: String?
+
+notes: String?
+
+notificationEnabled: Boolean
+
+reminderType: String
+
+reminderDaysBefore: Int
+
+reminderTime: String
+
+leapDayBehavior: String
+
+createdAt: Long
+
+updatedAt: Long
+
+deletedAt: Long?
+
+Make appropriate indexes.
+
+==================================================
+32. SOFT DELETE
+==================================================
+
+Support soft deletion.
+
+When a birthday is deleted:
+
+Set:
+
+deletedAt
+
+instead of immediately removing it.
+
+Settings should contain:
+
+Show deleted birthdays
+
+If enabled:
+
+show deleted birthdays separately.
+
+Provide:
+
+Restore
+
+Permanent Delete
+
+Empty Trash
+
+When permanently deleting:
+
+require confirmation.
+
+==================================================
+33. DATABASE
+==================================================
+
+Use Room.
+
+Create:
+
+BirthdayDao
+
+BirthdayDatabase
+
+BirthdayRepository
+
+Use Flow for reactive updates.
+
+Queries required:
+
+getAllBirthdays()
+
+getUpcomingBirthdays()
+
+getPastBirthdays()
+
+getBirthdayById()
+
+searchBirthdays()
+
+getBirthdaysForDate()
+
+getBirthdaysForMonth()
+
+getBirthdaysForYear()
+
+getDeletedBirthdays()
+
+insertBirthday()
+
+updateBirthday()
+
+softDeleteBirthday()
+
+restoreBirthday()
+
+permanentlyDeleteBirthday()
+
+deleteAll()
+
+==================================================
+34. CALENDAR ALGORITHM
+==================================================
+
+The year calendar should dynamically generate:
+
+January
+February
+March
+April
+May
+June
+July
+August
+September
+October
+November
+December
+
+Do NOT hardcode dates.
+
+Use LocalDate and YearMonth.
+
+Correctly handle:
+
+Leap years
+
+Month lengths
+
+Week start preference
+
+Timezone
+
+Locale
+
+Current date
+
+Birthday dates
+
+==================================================
+35. WEEK START
+==================================================
+
+Allow:
+
+Sunday
+
+Monday
+
+Saturday
+
+Calendar should dynamically rearrange weekday headers and date positions.
+
+==================================================
+36. RESPONSIVE UI
+==================================================
+
+The application must work on:
+
+Small Android phones
+
+Large phones
+
+Tablets
+
+Landscape orientation
+
+Use adaptive Compose layouts.
+
+For phone portrait:
+
+3-column month layout may be compressed.
+
+If necessary, intelligently switch to:
+
+2 columns
+
+or
+
+1 column
+
+depending on screen width.
+
+Do not allow text overlap.
+
+==================================================
+37. ACCESSIBILITY
+==================================================
+
+Support:
+
+Content descriptions
+
+TalkBack
+
+Large text
+
+Touch targets at least approximately 48dp
+
+Good contrast
+
+Semantic labels
+
+Do not communicate important information only through color.
+
+==================================================
+38. PERFORMANCE
+==================================================
+
+The calendar must remain smooth with:
+
+10 birthdays
+
+100 birthdays
+
+1,000 birthdays
+
+5,000 birthdays
+
+Avoid unnecessary recomposition.
+
+Use stable state models.
+
+Do not perform database operations on the main thread.
+
+==================================================
+39. SECURITY / PRIVACY
+==================================================
+
+Birthday information can contain personal data.
+
+Therefore:
+
+Store data locally.
+
+Do not send birthday data to a server.
+
+Do not add analytics by default.
+
+Do not request unnecessary permissions.
+
+Do not request:
+
+Contacts permission
+
+Location permission
+
+Camera permission
+
+unless actually implementing a feature requiring them.
+
+Photo selection should preferably use Android Photo Picker rather than broad storage permissions.
+
+==================================================
+40. PRIVACY SCREEN
+==================================================
+
+Create an in-app Privacy Policy screen.
+
+Clearly explain:
+
+- Birthday data is stored locally
+- Notifications are generated on device
+- No data is sold
+- No unnecessary personal information is collected
+- Export/share happens only when user initiates it
+
+If a future cloud sync feature is added, privacy policy architecture should be updateable.
+
+==================================================
+41. ABOUT SCREEN
+==================================================
+
+Show:
+
+Birthday Reminder
+
+"remind the date with me"
+
+Version:
+
+1.0.0
+
+Developer:
+
+Birthday Reminder Team
+
+Do not copy the developer information from the reference application.
+
+Include:
+
+Open Source Licenses
+
+Privacy Policy
+
+==================================================
+42. OVERFLOW MENU
+==================================================
+
+Top-right overflow menu should include useful actions such as:
+
+Notifications
+
+Import Birthdays
+
+Export Birthdays
+
+Backup
+
+Restore
+
+Settings
+
+About
+
+Keep destructive actions away from the main menu.
+
+==================================================
+43. HOME SCREEN UX
+==================================================
+
+When the application starts:
+
+Open current year.
+
+Example:
+
+2026
+
+Automatically scroll/position to current month if practical.
+
+Current date should be visually highlighted.
+
+Birthdays should be immediately visible.
+
+Do not force user to create an account.
+
+Do not show login/signup.
+
+==================================================
+44. ONBOARDING
+==================================================
+
+Create a lightweight first-launch onboarding.
+
+Page 1:
+
+"Never miss a birthday"
+
+Page 2:
+
+"Get reminders before important days"
+
+Page 3:
+
+"Keep birthdays organized"
+
+Page 4:
+
+"Your data stays on your device"
+
+Button:
+
+Get Started
+
+Do not make onboarding mandatory every launch.
+
+Save onboarding state using DataStore.
+
+==================================================
+45. PERMISSION FLOW
+==================================================
+
+For Android notification permission:
+
+Do not request immediately on app launch without context.
+
+Ask after user enables birthday reminders or at an appropriate onboarding step.
+
+Explain:
+
+"Allow notifications so Birthday Reminder can remind you about upcoming birthdays."
+
+Buttons:
+
+Allow Notifications
+
+Not Now
+
+==================================================
+46. NOTIFICATION SCHEDULING
+==================================================
+
+When a birthday is created or updated:
+
+Schedule required reminder alarms.
+
+When a birthday is deleted:
+
+Cancel associated alarms.
+
+When reminder settings change:
+
+Cancel old alarm and schedule new one.
+
+At device reboot:
+
+Reschedule notifications.
+
+Create BootReceiver if required.
+
+Handle timezone changes correctly.
+
+Do not create duplicate alarms.
+
+Use unique request IDs based on:
+
+birthdayId
+reminder type
+target date
+
+==================================================
+47. YEARLY RECURRENCE
+==================================================
+
+Birthday reminders repeat yearly.
+
+For example:
+
+DOB:
+26 September 2000
+
+Upcoming:
+
+26 September 2026
+26 September 2027
+26 September 2028
+
+Do not create separate database rows for each year.
+
+Calculate next occurrence dynamically.
+
+==================================================
+48. SPECIAL DATE HANDLING
+==================================================
+
+Handle:
+
+February 29 birthdays
+
+Leap years
+
+Past birthdays
+
+Today's birthdays
+
+Tomorrow
+
+Year-end transitions
+
+New year
+
+Timezone changes
+
+Device reboot
+
+Daylight saving where applicable
+
+Locale changes
+
+==================================================
+49. NOTIFICATION CLICK
+==================================================
+
+When user taps a birthday notification:
+
+Open the exact Birthday Detail screen.
+
+Do not simply open the home screen.
+
+Use deep-link/navigation intent.
+
+==================================================
+50. IMPORT DUPLICATE DETECTION
+==================================================
+
+When importing:
+
+Detect likely duplicates based on:
+
+Name
+Date of birth
+
+Optionally:
+
+phone/email
+
+Show:
+
+Duplicate records found
+
+For each:
+
+Existing record
+Imported record
+
+Allow:
+
+Skip
+Replace
+Keep both
+
+==================================================
+51. EXPORT
+==================================================
+
+Use Android Storage Access Framework.
+
+Do not request broad storage permission unnecessarily.
+
+Allow user to select destination.
+
+File examples:
+
+birthday-reminder-backup.json
+
+birthdays.csv
+
+==================================================
+52. ERROR HANDLING
+==================================================
+
+Every operation should have proper error handling.
+
+Examples:
+
+Database failure
+
+Invalid import file
+
+Permission denied
+
+Notification permission denied
+
+Invalid date
+
+Restore failure
+
+Export failure
+
+File unavailable
+
+Show user-friendly messages.
+
+Never expose raw stack traces to users.
+
+Log technical details using Android Log only in debug builds.
+
+==================================================
+53. LOGGING
+==================================================
+
+Create a simple logging utility.
+
+Debug:
+
+Detailed logs
+
+Release:
+
+Minimal/no sensitive logs
+
+Never log:
+
+Phone numbers
+
+Emails
+
+Private notes
+
+Birthday personal information
+
+==================================================
+54. TESTING
+==================================================
+
+Create unit tests for:
+
+Age calculation
+
+Next birthday calculation
+
+Countdown
+
+Leap-year handling
+
+Feb 29 behavior
+
+Zodiac calculation
+
+CSV parsing
+
+JSON backup/restore
+
+Duplicate detection
+
+Reminder calculation
+
+Calendar generation
+
+Create DAO tests.
+
+Create ViewModel tests.
+
+Create UI tests for:
+
+Add birthday
+
+Edit birthday
+
+Delete birthday
+
+Search
+
+Settings
+
+Theme
+
+Import
+
+Export
+
+Notification navigation
+
+==================================================
+55. TEST DATA
+==================================================
+
+Create optional debug/sample data generator.
+
+Sample:
+
+Rahul Sharma
+26 September 2000
+
+Priya Verma
+7 November 1998
+
+Amit Singh
+25 November 2001
+
+Do not include sample data in release builds unless user explicitly creates it.
+
+==================================================
+56. MATERIAL DESIGN
+==================================================
+
+Use Material 3.
+
+Components:
+
+TopAppBar
+
+NavigationDrawer
+
+FloatingActionButton
+
+Card
+
+ListItem
+
+Switch
+
+DropdownMenu
+
+DatePicker
+
+TimePicker
+
+AlertDialog
+
+Snackbar
+
+Scaffold
+
+NavigationBar where appropriate
+
+Use consistent spacing:
+
+4dp
+8dp
+12dp
+16dp
+24dp
+
+Avoid excessive UI clutter.
+
+==================================================
+57. VISUAL DESIGN
+==================================================
+
+The reference application is simple and functional.
+
+Improve it by creating:
+
+- cleaner typography
+- better hierarchy
+- modern cards
+- better birthday indicators
+- polished empty states
+- subtle animations
+- modern settings sections
+- accessible contrast
+- consistent iconography
+
+Do not make it overly colorful.
+
+The calendar must remain the main focus.
+
+==================================================
+58. ANIMATIONS
+==================================================
+
+Use subtle animations only.
+
+Examples:
+
+Birthday card appearance
+
+Screen transitions
+
+Snackbar
+
+FAB interaction
+
+Do not use distracting animations.
+
+==================================================
+59. SEARCH UI
+==================================================
+
+Search icon in top app bar.
+
+When clicked:
+
+Transform toolbar into search field.
+
+Placeholder:
+
+"Search birthdays..."
+
+Support clear button.
+
+Back button closes search.
+
+==================================================
+60. CALENDAR MONTH DESIGN
+==================================================
+
+Each month card should contain:
+
+Month title
+
+Weekday labels
+
+Dates
+
+Birthday indicators
+
+Today indicator
+
+Selected date indicator
+
+The birthday indicator must not make the date unreadable.
+
+If multiple birthdays exist on same date:
+
+Show:
+
+🎈 +2
+
+or another compact indicator.
+
+Clicking the date shows all birthdays.
+
+==================================================
+61. UPCOMING BIRTHDAY CALCULATION
+==================================================
+
+For each birthday:
+
+Calculate:
+
+nextBirthdayDate
+
+daysUntilBirthday
+
+ageAtNextBirthday
+
+Use current device date.
+
+Examples:
+
+Today
+
+Tomorrow
+
+In 3 days
+
+In 42 days
+
+In 1 year and 42 days
+
+Use human-readable formatting.
+
+==================================================
+62. HOME SCREEN FAB
+==================================================
+
+Floating action button:
+
++
+
+Tooltip:
+
+"Add Birthday"
+
+Click:
+
+Open Add Birthday screen.
+
+==================================================
+63. SETTINGS DATASTORE
+==================================================
+
+Persist settings using DataStore.
+
+Settings include:
+
+theme
+
+toolbarColor
+
+weekStart
+
+notificationEnabled
+
+notificationSound
+
+vibration
+
+defaultReminder
+
+defaultReminderTime
+
+showZodiac
+
+showChineseZodiac
+
+showPastBirthdays
+
+showAge
+
+leapDayBehavior
+
+language
+
+onboardingCompleted
+
+==================================================
+64. DEFAULT VALUES
+==================================================
+
+Default:
+
+Theme:
+System
+
+Week starts:
+Sunday
+
+Notifications:
+Enabled after permission
+
+Notification sound:
+Enabled
+
+Vibration:
+Enabled
+
+Reminder:
+On birthday
+
+Reminder time:
+09:00
+
+Zodiac:
+Disabled
+
+Chinese zodiac:
+Disabled
+
+Past birthdays:
+Disabled
+
+Show age:
+Enabled
+
+Leap day:
+February 28
+
+==================================================
+65. APP NAVIGATION
+==================================================
+
+Navigation routes:
+
+calendar
+
+next
+
+search
+
+addBirthday
+
+editBirthday/{id}
+
+birthdayDetail/{id}
+
+notifications
+
+import
+
+export
+
+settings
+
+about
+
+privacy
+
+licenses
+
+backup
+
+restore
+
+==================================================
+66. DEEP LINK
+==================================================
+
+Support internal navigation to:
+
+birthday/{id}
+
+from:
+
+notifications
+
+search
+
+calendar
+
+next
+
+sharing where applicable
+
+==================================================
+67. BUILD CONFIGURATION
+==================================================
+
+Configure:
+
+debug
+
+release
+
+versionCode
+
+versionName
+
+applicationId
+
+signing configuration placeholder
+
+ProGuard/R8 for release if appropriate.
+
+Do not put real signing keys in the repository.
+
+==================================================
+68. ICON
+==================================================
+
+Create a simple app icon concept:
+
+Birthday balloon + calendar
+
+Do not copy icons from the reference application.
+
+Generate Android adaptive icon resources.
+
+==================================================
+69. SPLASH SCREEN
+==================================================
+
+Create Android SplashScreen API implementation.
+
+Show:
+
+Birthday Reminder
+
+with simple birthday/calendar icon.
+
+Keep splash short.
+
+==================================================
+70. OFFLINE-FIRST
+==================================================
+
+The application must work without internet.
+
+Core features:
+
+Calendar
+Add birthday
+Edit birthday
+Delete
+Search
+Notifications
+Settings
+Import/export
+Backup/restore
+
+must work offline.
+
+==================================================
+71. NO ACCOUNT REQUIRED
+==================================================
+
+Do not require:
+
+Google login
+
+Email login
+
+Phone login
+
+Account creation
+
+The app should work immediately after installation.
+
+==================================================
+72. FUTURE CLOUD SUPPORT
+==================================================
+
+Keep interfaces ready for:
+
+CloudBackupRepository
+
+SyncRepository
+
+but do not implement unnecessary backend infrastructure.
+
+==================================================
+73. APP PERMISSIONS
+==================================================
+
+Only request permissions actually required.
+
+Likely:
+
+POST_NOTIFICATIONS
+
+For Android versions where exact alarms require special access, handle the relevant Android behavior appropriately.
+
+Do not request:
+
+Contacts
+
+Location
+
+SMS
+
+Phone
+
+Camera
+
+unless a future feature specifically requires it.
+
+==================================================
+74. REPOSITORY QUALITY
+==================================================
+
+Write real production-quality code.
+
+Do not use:
+
+TODO
+
+placeholder functions
+
+fake database
+
+fake notification logic
+
+mock UI pretending to be functional
+
+hardcoded birthday data
+
+unfinished screens
+
+empty click listeners
+
+Every visible feature must work.
+
+==================================================
+75. REPLIT EXECUTION INSTRUCTIONS
+==================================================
+
+You are responsible for preparing the entire project.
+
+First inspect the Replit environment.
+
+Determine:
+
+- operating system
+- Java version
+- Gradle availability
+- Android SDK availability
+- Android build tools
+- Kotlin compatibility
+
+Then create the Android project accordingly.
+
+If the required Android tooling is missing:
+
+Install/configure what is possible in the Replit environment.
+
+Do not assume Android Studio is available.
+
+Use Gradle command-line tooling where possible.
+
+==================================================
+76. PROJECT INITIALIZATION
+==================================================
+
+Create:
+
+settings.gradle.kts
+
+build.gradle.kts
+
+gradle.properties
+
+gradlew
+
+gradlew.bat
+
+app/build.gradle.kts
+
+AndroidManifest.xml
+
+proguard-rules.pro
+
+source directories
+
+resource directories
+
+tests
+
+README.md
+
+==================================================
+77. README
+==================================================
+
+Create a complete README explaining:
+
+Project overview
+
+Features
+
+Architecture
+
+Tech stack
+
+How to build
+
+How to run
+
+How to test
+
+How notifications work
+
+How database works
+
+How import/export works
+
+How to generate release APK
+
+How to configure signing
+
+Known Android permission requirements
+
+Future extension points
+
+==================================================
+78. BUILD AND VERIFY
+==================================================
+
+After implementation, run:
+
+./gradlew clean
+
+./gradlew test
+
+./gradlew assembleDebug
+
+If possible:
+
+./gradlew lint
+
+Fix all compilation errors.
+
+Fix relevant lint errors.
+
+Do not stop at the first successful compilation.
+
+==================================================
+79. TEST THE APPLICATION
+==================================================
+
+Verify:
+
+1. App launches
+
+2. Calendar loads current year
+
+3. All 12 months appear
+
+4. Current date is highlighted
+
+5. Add Birthday works
+
+6. Birthday appears on calendar
+
+7. Birthday appears in Next screen
+
+8. Search works
+
+9. Edit works
+
+10. Delete works
+
+11. Undo works
+
+12. Notification scheduling works
+
+13. Notification click opens birthday
+
+14. Settings persist after restart
+
+15. Theme persists
+
+16. Import works
+
+17. Export works
+
+18. Backup works
+
+19. Restore works
+
+20. Duplicate detection works
+
+21. Leap-year logic works
+
+22. Feb 29 behavior works
+
+23. Past birthday logic works
+
+24. Age calculation works
+
+25. No crash occurs on empty database
+
+==================================================
+80. QUALITY CHECK
+==================================================
+
+Before finishing, inspect the entire project for:
+
+Compilation errors
+
+Unused imports
+
+Incorrect imports
+
+Deprecated APIs
+
+Nullability problems
+
+Lifecycle issues
+
+Memory leaks
+
+Notification duplication
+
+Database race conditions
+
+Navigation bugs
+
+State restoration issues
+
+Configuration errors
+
+Incorrect date calculations
+
+Timezone bugs
+
+Accessibility issues
+
+Dark mode issues
+
+Localization issues
+
+UI overflow
+
+Small-screen layout issues
+
+==================================================
+81. FINAL DELIVERABLE
+==================================================
+
+The final Replit workspace must contain a complete Android project.
+
+Provide:
+
+1. Complete source code
+
+2. Gradle configuration
+
+3. Resources
+
+4. Icons
+
+5. Database
+
+6. Notifications
+
+7. Tests
+
+8. README
+
+9. Debug APK if the environment allows building it
+
+10. Clear instructions for opening/building the project in Android Studio
+
+==================================================
+82. IMPORTANT IMPLEMENTATION RULE
+==================================================
+
+Do NOT stop after generating the initial project.
+
+Follow this workflow:
+
+PLAN
+↓
+CREATE PROJECT
+↓
+IMPLEMENT DATABASE
+↓
+IMPLEMENT DOMAIN LOGIC
+↓
+IMPLEMENT UI
+↓
+IMPLEMENT NAVIGATION
+↓
+IMPLEMENT NOTIFICATIONS
+↓
+IMPLEMENT IMPORT/EXPORT
+↓
+IMPLEMENT SETTINGS
+↓
+IMPLEMENT TESTS
+↓
+BUILD
+↓
+TEST
+↓
+FIX ERRORS
+↓
+BUILD AGAIN
+↓
+FINAL QUALITY CHECK
+
+If an error occurs during the build:
+
+Read the actual error.
+
+Identify the root cause.
+
+Fix the code/configuration.
+
+Run the build again.
+
+Continue until the project builds successfully or you encounter an environment limitation that genuinely cannot be resolved.
+
+==================================================
+83. IMPORTANT DESIGN RULE
+==================================================
+
+The screenshots are references for:
+
+layout ideas
+calendar organization
+settings organization
+upcoming birthday organization
+menu structure
+
+Do not clone the exact application.
+
+Create an original implementation with a more modern Material 3 UI.
+
+==================================================
+84. FINAL USER EXPERIENCE
+==================================================
+
+The user should be able to install the app and immediately:
+
+1. Open Birthday Reminder
+
+2. See the current year calendar
+
+3. Tap +
+
+4. Add a person's birthday
+
+5. Save it
+
+6. See the birthday on the calendar
+
+7. See it in Upcoming Birthdays
+
+8. Receive a notification on the configured date
+
+9. Tap the notification
+
+10. Open that person's birthday details
+
+11. Edit/delete/share the birthday
+
+12. Import/export/backup their data
+
+without requiring an account or internet connection.
+
+==================================================
+85. FINAL INSTRUCTION TO REPLIT AGENT
+==================================================
+
+Act as the complete engineering team.
+
+Do not merely explain what should be done.
+
+Actually create the files and implement the application.
+
+Make reasonable technical decisions yourself when something is not explicitly specified.
+
+Prioritize:
+
+correctness
+reliability
+offline functionality
+notification reliability
+clean architecture
+maintainability
+accessibility
+modern Android UX
+
+When finished, report:
+
+- project structure
+- technologies used
+- implemented features
+- build command
+- test command
+- whether debug APK was successfully generated
+- APK location
+- any remaining environment limitations
+
+Do not claim that a feature works unless you actually implemented and tested it.

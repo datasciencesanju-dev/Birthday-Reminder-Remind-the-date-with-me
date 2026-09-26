@@ -1,0 +1,207 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: birthdays
+    description: Birthday records and calendar summary
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /birthdays:
+    get:
+      operationId: listBirthdays
+      tags: [birthdays]
+      summary: List birthdays
+      parameters:
+        - name: includeDeleted
+          in: query
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Birthday records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Birthday"
+    post:
+      operationId: createBirthday
+      tags: [birthdays]
+      summary: Create a birthday
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BirthdayInput"
+      responses:
+        "201":
+          description: Created birthday
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Birthday"
+  /birthdays/summary:
+    get:
+      operationId: birthdaySummary
+      tags: [birthdays]
+      summary: Get birthday summary
+      responses:
+        "200":
+          description: Calendar summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BirthdaySummary"
+  /birthdays/{id}:
+    get:
+      operationId: getBirthday
+      tags: [birthdays]
+      summary: Get one birthday
+      parameters:
+        - $ref: "#/components/parameters/BirthdayId"
+      responses:
+        "200":
+          description: Birthday record
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Birthday"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateBirthday
+      tags: [birthdays]
+      summary: Update a birthday
+      parameters:
+        - $ref: "#/components/parameters/BirthdayId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BirthdayPatch"
+      responses:
+        "200":
+          description: Updated birthday
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Birthday"
+    delete:
+      operationId: deleteBirthday
+      tags: [birthdays]
+      summary: Soft-delete a birthday
+      parameters:
+        - $ref: "#/components/parameters/BirthdayId"
+      responses:
+        "204":
+          description: Deleted
+components:
+  parameters:
+    BirthdayId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+    BirthdayInput:
+      type: object
+      properties:
+        name:
+          type: string
+        nickname:
+          type: string
+        dateOfBirth:
+          type: string
+        birthYearKnown:
+          type: boolean
+        phone:
+          type: string
+        email:
+          type: string
+        relationship:
+          type: string
+        notes:
+          type: string
+        reminderEnabled:
+          type: boolean
+        reminderDaysBefore:
+          type: integer
+          enum: [0, 1, 2, 3, 7]
+        reminderTime:
+          type: string
+      required:
+        - name
+        - dateOfBirth
+        - birthYearKnown
+        - reminderEnabled
+        - reminderDaysBefore
+        - reminderTime
+    BirthdayPatch:
+      allOf:
+        - $ref: "#/components/schemas/BirthdayInput"
+      description: Any subset of birthday fields
+    Birthday:
+      allOf:
+        - $ref: "#/components/schemas/BirthdayInput"
+        - type: object
+          properties:
+            id:
+              type: string
+            createdAt:
+              type: string
+            updatedAt:
+              type: string
+            deletedAt:
+              type: string
+          required:
+            - id
+            - createdAt
+            - updatedAt
+    BirthdaySummary:
+      type: object
+      properties:
+        total:
+          type: integer
+        monthCounts:
+          type: array
+          items:
+            type: integer
+        storage:
+          type: string
+      required:
+        - total
+        - monthCounts
+        - storage
+
